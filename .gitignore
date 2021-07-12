@@ -1,0 +1,8 @@
+# Secret Key
+usuaios/secret.json
+
+# Python cache
+*pyc
+
+#Visual SC
+/.vscode
