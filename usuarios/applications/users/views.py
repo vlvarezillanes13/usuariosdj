@@ -18,9 +18,10 @@ from .models import User
 # Create your views here.
 
 class UserRegisterView(LoginRequiredMixin,FormView):
+    login_url = reverse_lazy('users_app:user-login')
     template_name = 'users/register.html'
     form_class = UserRegisterForm
-    success_url = '/'
+    success_url = reverse_lazy("home_app:panel")
 
     def form_valid(self, form):
         User.objects.create_user(
@@ -56,6 +57,7 @@ class LogoutView(View):
 
     
 class UpdatePasswordView(LoginRequiredMixin,FormView):
+    login_url = reverse_lazy('users_app:user-login')
     template_name = "users/update.html"
     form_class = UpdatePasswordForm
     success_url = reverse_lazy('users_app:user-login')
