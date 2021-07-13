@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import (
@@ -16,7 +17,7 @@ from .forms import (
 from .models import User
 # Create your views here.
 
-class UserRegisterView(FormView):
+class UserRegisterView(LoginRequiredMixin,FormView):
     template_name = 'users/register.html'
     form_class = UserRegisterForm
     success_url = '/'
@@ -54,7 +55,7 @@ class LogoutView(View):
         )
 
     
-class UpdatePasswordView(FormView):
+class UpdatePasswordView(LoginRequiredMixin,FormView):
     template_name = "users/update.html"
     form_class = UpdatePasswordForm
     success_url = reverse_lazy('users_app:user-login')
