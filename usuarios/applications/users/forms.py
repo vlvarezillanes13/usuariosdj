@@ -62,10 +62,45 @@ class LoginForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(LoginForm, self).clean()
-        username = self.cleaned_data['username'],
-        password = self.cleaned_data['password']
-
-        if not authenticate(username=username,password=password):
+        username_ = self.cleaned_data['username']
+        password_ = self.cleaned_data['password']
+        
+        if not authenticate(username=username_, password=password_):
             raise forms.ValidationError('Los datos del usuario no son correctos')
         
+        return self.cleaned_data
+
+class UpdatePasswordForm(forms.Form):
+      
+    password1 = forms.CharField(
+        label='Contraseña Actual',
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder':'Contraseña Actual'
+            }
+        )
+    )
+    password2 = forms.CharField(
+        label='Contraseña Nueva',
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                'placeholder':'Contraseña Nueva'
+            }
+        )
+    )
+    def __init__(self, *args, **kwargs):
+
+        self.request = kwargs.pop('request')
+        super(UpdatePasswordForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(UpdatePasswordForm, self).clean()
+        username_ = self.request.user.username
+        password_ = self.cleaned_data['password1']
+        
+        if not authenticate(username=username_, password=password_):
+            raise forms.ValidationError('Contraseña Actual Incorrecta')
+
         return self.cleaned_data
