@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import authenticate
+from django.db import models
 
 from .models import User
 
@@ -104,3 +105,24 @@ class UpdatePasswordForm(forms.Form):
             raise forms.ValidationError('Contraseña Actual Incorrecta')
 
         return self.cleaned_data
+
+class VerificacionForm(forms.Form):
+    codregistro = forms.CharField(required=True)
+
+    def __init__(self, *args, **kwargs):
+
+        self.id_user = kwargs.pop('pk')
+        super(VerificacionForm, self).__init__(*args, **kwargs)
+
+    def clean_codregistro(self):
+        codigo = self.cleaned_data['codregistro']
+
+        if len(codigo) == 6:
+            activo = User.objects.cod_validation(
+                self.id_user,
+                codigo
+            )
+            if not activo:
+                raise forms.ValidationError('el código es incorrecto')
+        else:
+            raise forms.ValidationError('el código es incorrecto')
