@@ -16,10 +16,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     apellidos = models.CharField(max_length=30, blank=True)
     genero = models.CharField(max_length=1, choices=GENDER_CHOISES, blank=True)
     is_staff = models.BooleanField(default=False)
-
-    objects = UserManager
+    
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email',]
+    
+    objects = UserManager()
+
+    
 
     def get_short_name(self):
         return self.username
